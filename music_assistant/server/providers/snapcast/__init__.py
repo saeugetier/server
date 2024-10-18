@@ -439,7 +439,7 @@ class SnapCastProvider(PlayerProvider):
         if stream_task := self._stream_tasks.pop(player_id, None):
             if not stream_task.done():
                 stream_task.cancel()
-        player.state = PlayerState.IDLE
+        player.state = PlayerState.PAUSED
         self._set_childs_state(player_id)
         self.mass.players.register_or_update(player)
         # assign default/empty stream to the player
@@ -562,7 +562,7 @@ class SnapCastProvider(PlayerProvider):
                 # to ensure that all snapclients have consumed the audio
                 while stream.status != "idle":
                     await asyncio.sleep(0.25)
-                player.state = PlayerState.IDLE
+                player.state = PlayerState.PAUSED
                 self.mass.players.update(player_id)
                 self._set_childs_state(player_id)
             finally:
